@@ -1,4 +1,4 @@
-#alg1game
+# alg1game
 A fun web game to learn about slopes. Requested by Rachel Vale. Contributors: Theo C, Eyal W, Alex C, Aditya S
 
 
