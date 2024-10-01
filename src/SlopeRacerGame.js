@@ -77,6 +77,8 @@ function SlopeRacerGame() {
   // Handle retry button
   const handleRetry = () => {
     setCarPosition({ x: 1, y: GRID_SIZE - 2 });
+    setXMove(0);
+    setYMove(0);
     moveX = 0;
     moveY = 0;
     setGameOver(false);
