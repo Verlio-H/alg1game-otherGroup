@@ -1,7 +1,7 @@
 # alg1game
 A fun web game to learn about slopes. Requested by Rachel Vale (Overlake Math Dept.). Contributors: Theo C, Oliver H, Theo O, Eyal W
 
-React Instructions ↓
+## React Instructions ↓
 
 To get the React app working after downloading this repository, follow these steps in the terminal:
 
