@@ -4,6 +4,9 @@ import './SlopeRacerGame.css';
 const GRID_SIZE = 10; // Define the size of the grid
 const CELL_SIZE = 30; // Size of each grid cell in pixels
 
+var moveX = 0;
+var moveY = 0;
+
 function SlopeRacerGame() {
   // Initialize the grid with white squares and edges as black squares
   const createInitialGrid = () => {
@@ -33,16 +36,18 @@ function SlopeRacerGame() {
   const [carPosition, setCarPosition] = useState({ x: 1, y: GRID_SIZE - 2 });
 
   // Sliders' state
-  const [xMove, setXMove] = useState(0);
-  const [yMove, setYMove] = useState(0);
+  const [newMoveX, setXMove] = useState(0);
+  const [newMoveY, setYMove] = useState(0);
 
   // Game over state
   const [gameOver, setGameOver] = useState(false);
 
   // Handle the move button click
   const handleMove = () => {
-    const newX = carPosition.x + xMove;
-    const newY = carPosition.y - yMove; // Subtract because y increases downward
+    moveX += newMoveX;
+    const newX = carPosition.x + moveX;
+    moveY += newMoveY;
+    const newY = carPosition.y - moveY; // Subtract because y increases downward
 
     // Check for out-of-bounds
     if (
@@ -72,6 +77,8 @@ function SlopeRacerGame() {
   // Handle retry button
   const handleRetry = () => {
     setCarPosition({ x: 1, y: GRID_SIZE - 2 });
+    moveX = 0;
+    moveY = 0;
     setGameOver(false);
   };
 
@@ -101,11 +108,11 @@ function SlopeRacerGame() {
 
   // Calculate arrow line
   let arrowLine = null;
-  if (!gameOver && (xMove !== 0 || yMove !== 0)) {
+  if (!gameOver && (moveX + newMoveX !== 0 || moveY + newMoveY !== 0)) {
     const startX = carPosition.x * CELL_SIZE + CELL_SIZE / 2;
     const startY = carPosition.y * CELL_SIZE + CELL_SIZE / 2;
-    const endX = (carPosition.x + xMove) * CELL_SIZE + CELL_SIZE / 2;
-    const endY = (carPosition.y - yMove) * CELL_SIZE + CELL_SIZE / 2;
+    const endX = (carPosition.x + moveX + newMoveX) * CELL_SIZE + CELL_SIZE / 2;
+    const endY = (carPosition.y - moveY - newMoveY) * CELL_SIZE + CELL_SIZE / 2;
 
     const svgWidth = GRID_SIZE * CELL_SIZE;
     const svgHeight = GRID_SIZE * CELL_SIZE;
@@ -157,22 +164,22 @@ function SlopeRacerGame() {
           </div>
           <div className="controls">
             <div className="slider">
-              <label>Horizontal Move (X): {xMove}</label>
+              <label>Horizontal Move (X): {newMoveX+moveX}</label>
               <input
                 type="range"
-                min={-5}
-                max={5}
-                value={xMove}
+                min={-1}
+                max={1}
+                value={newMoveX}
                 onChange={(e) => setXMove(parseInt(e.target.value))}
               />
             </div>
             <div className="slider">
-              <label>Vertical Move (Y): {yMove}</label>
+              <label>Vertical Move (Y): {newMoveY+moveY}</label>
               <input
                 type="range"
-                min={-5}
-                max={5}
-                value={yMove}
+                min={-1}
+                max={1}
+                value={newMoveY}
                 onChange={(e) => setYMove(parseInt(e.target.value))}
               />
             </div>
