@@ -1,5 +1,5 @@
 # alg1game
-A fun web game to learn about slopes. Requested by Rachel Vale (Overlake Math Dept.). Contributors: Theo C, Oliver H, Theo O, Eyal W
+A fun web game to learn about slopes. Requested by Rachel Vale (Overlake Math Dept.). Contributors: Oliver H, Yousef H, Alex C, Aditya S, Theo C
 
 ## React Instructions ↓
 
@@ -34,4 +34,4 @@ npm install
 
 Contact:
 
-For questions or support, please open an issue in the repository or contact 25tchapman@overlake.org
+For questions or support, please open an issue in the repository or contact 25ohines@overlake.org
