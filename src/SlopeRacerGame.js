@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './SlopeRacerGame.css';
 import Vec2 from './Vec2';
 
-const GRID_SIZE = 60; // Define the size of the grid
+const GRID_SIZE = 55; // Define the size of the grid
 const CELL_SIZE = 15; // Size of each grid cell in pixels
 
 let moveX = 0;
@@ -19,6 +19,8 @@ function getRandomInt(min, max) {
 
 const min = Math.min;
 const max = Math.max;
+
+let score = 0;
 
 function SlopeRacerGame() {
 
@@ -61,6 +63,8 @@ function SlopeRacerGame() {
             currentRow.push('black');
           } else if (col === 1 && Math.abs(row-course[0][0][1])<=radius) {
             currentRow.push('green');
+          } else if (col === GRID_SIZE-2) {
+            currentRow.push('red');
           } else {
             currentRow.push('white');
           }
@@ -76,7 +80,7 @@ function SlopeRacerGame() {
   const randomCarInitPosition = () => {
     return getRandomInt(max(course[0][0][1]-radius,1),min(course[0][0][1]+radius,GRID_SIZE-2));
   }
-  
+
   // Set the starting position of the car
   const [carPosition, setCarPosition] = useState({ x: 1, y: randomCarInitPosition()});
 
@@ -92,8 +96,12 @@ function SlopeRacerGame() {
   // Game over state
   const [gameOver, setGameOver] = useState(false);
 
+  // Victory state a
+  const [victory, setVictory] = useState(false);
+
   // Handle the move button click
   const handleMove = () => {
+    score += 1;
     moveX += newMoveX;
     const newX = carPosition.x + moveX;
     moveY += newMoveY;
@@ -116,6 +124,12 @@ function SlopeRacerGame() {
       return;
     }
 
+    // Check if the next square is red and movement is 0
+    if (grid[newY][newX] === 'red' && moveX === 0 && moveY === 0) {
+      setVictory(true);
+      return;
+    }
+
     // Update car position
     setCarPosition({ x: newX, y: newY });
 
@@ -131,6 +145,8 @@ function SlopeRacerGame() {
     setYMove(0);
     moveX = 0;
     moveY = 0;
+    score = 0;
+    setVictory(false);
     setGameOver(false);
   };
 
@@ -217,6 +233,12 @@ function SlopeRacerGame() {
           <h2>Out of Bounds!</h2>
           <button onClick={handleRetry}>Retry</button>
         </div>
+      ) : (victory ? (
+        <div className="victory">
+          <h2>You Win!</h2>
+          <p>final score: {score}</p>
+          <button onClick={handleRetry}>Retry</button>
+        </div>
       ) : (
         <>
           <div className="grid-container" style={{ position: 'relative' }}>
@@ -253,10 +275,11 @@ function SlopeRacerGame() {
                 onChange={(e) => setYMove(parseInt(e.target.value))}
               />
             </div>
+            <p>Current Score: {score}</p>
             <button onClick={handleMove}>Move</button>
           </div>
         </>
-      )}
+      ))}
     </div>
   );
 }
