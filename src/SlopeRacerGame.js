@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import './SlopeRacerGame.css';
 
-const GRID_SIZE = 40; // Define the size of the grid
+const GRID_SIZE = 100; // Define the size of the grid
 const CELL_SIZE = 10; // Size of each grid cell in pixels
 
 var moveX = 0;
 var moveY = 0;
+
+function getRandomInt(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max)+1;
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); //inclusive
+}
 
 function SlopeRacerGame() {
   // Initialize the grid with white squares and edges as black squares
@@ -21,6 +27,8 @@ function SlopeRacerGame() {
           col === GRID_SIZE - 1
         ) {
           currentRow.push('black');
+        } else if (col === 1) {
+          currentRow.push('green');
         } else {
           currentRow.push('white');
         }
@@ -33,7 +41,12 @@ function SlopeRacerGame() {
   const [grid, setGrid] = useState(createInitialGrid());
 
   // Set the starting position of the car
-  const [carPosition, setCarPosition] = useState({ x: 1, y: GRID_SIZE - 2 });
+  const [carPosition, setCarPosition] = useState({ x: 1, y: getRandomInt(1,GRID_SIZE - 2) });
+
+  // Randomize car position
+  const randomizePosition = () => {
+    setCarPosition({ x: 1, y: getRandomInt(1,GRID_SIZE - 2) })
+  }
 
   // Sliders' state
   const [newMoveX, setXMove] = useState(0);
@@ -76,7 +89,7 @@ function SlopeRacerGame() {
 
   // Handle retry button
   const handleRetry = () => {
-    setCarPosition({ x: 1, y: GRID_SIZE - 2 });
+    randomizePosition();
     setXMove(0);
     setYMove(0);
     moveX = 0;
@@ -91,11 +104,7 @@ function SlopeRacerGame() {
       let className = 'grid-cell';
 
       // Apply cell color
-      if (grid[rowIndex][colIndex] === 'black') {
-        className += ' black-cell';
-      } else {
-        className += ' white-cell';
-      }
+      className += ' '+grid[rowIndex][colIndex]+'-cell';
 
       var inside = '';
       // Position the car

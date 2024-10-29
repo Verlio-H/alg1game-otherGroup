@@ -8,19 +8,6 @@
   position: relative;
 }
 
-/* .grid {
-  display: grid;
-  grid-template-columns: repeat(100, 30px);
-  grid-template-rows: repeat(100, 30px);
-  position: relative;
-} */
-
-/* .grid-cell {
-  width: 30px;
-  height: 30px;
-  box-sizing: border-box;
-} */
-
 .white-cell {
   background-color: white;
   border: 1px solid #ccc;
@@ -28,6 +15,11 @@
 
 .black-cell {
   background-color: black;
+}
+
+.green-cell {
+  background-color: limegreen;
+  border: 1px solid #ccc;
 }
 
 .controls {
