@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './SlopeRacerGame.css';
 
-const GRID_SIZE = 10; // Define the size of the grid
-const CELL_SIZE = 30; // Size of each grid cell in pixels
+const GRID_SIZE = 40; // Define the size of the grid
+const CELL_SIZE = 10; // Size of each grid cell in pixels
 
 var moveX = 0;
 var moveY = 0;
@@ -97,13 +97,26 @@ function SlopeRacerGame() {
         className += ' white-cell';
       }
 
+      var inside = '';
       // Position the car
       if (carPosition.x === colIndex && carPosition.y === rowIndex) {
-        className += ' car-cell';
+        inside = (<div
+          className='car-cell'
+          style={{
+            content: '',
+            position: 'relative',
+            top: 1/8*CELL_SIZE-1+'px',
+            left: 1/8*CELL_SIZE-1+'px',
+            width: 3/4*CELL_SIZE+'px',
+            height: 3/4*CELL_SIZE+'px',
+            backgroundColor: 'red',
+            borderRadius: '50%',
+          }}
+          ></div>);
       }
 
       gridCells.push(
-        <div key={`${rowIndex}-${colIndex}`} className={className}></div>
+        <div key={`${rowIndex}-${colIndex}`} className={className}>{inside}</div>
       );
     }
   }
@@ -129,13 +142,13 @@ function SlopeRacerGame() {
         <defs>
           <marker
             id="arrowhead"
-            markerWidth="10"
-            markerHeight="7"
-            refX="5"
-            refY="3.5"
+            markerWidth={CELL_SIZE/3}
+            markerHeight={CELL_SIZE/5}
+            refX={CELL_SIZE/6}
+            refY={CELL_SIZE/10}
             orient="auto"
           >
-            <polygon points="0 0, 10 3.5, 0 7" fill="blue" />
+            <polygon points={'0 0,'+CELL_SIZE/3+' '+CELL_SIZE/10+', 0 '+CELL_SIZE/5} fill="blue" />
           </marker>
         </defs>
         <line
@@ -160,8 +173,17 @@ function SlopeRacerGame() {
         </div>
       ) : (
         <>
-          <div className="grid-container">
-            <div className="grid">{gridCells}</div>
+          <div className="grid-container" style={{ position: 'relative' }}>
+            <div
+              className="grid"
+              style={{
+                display: 'grid',
+                gridTemplateRows: `repeat(${GRID_SIZE}, ${CELL_SIZE}px)`,
+                gridTemplateColumns: `repeat(${GRID_SIZE}, ${CELL_SIZE}px)`,
+              }}
+            >
+              {gridCells}
+            </div>
             {arrowLine}
           </div>
           <div className="controls">

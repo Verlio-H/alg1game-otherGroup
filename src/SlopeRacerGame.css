@@ -8,18 +8,18 @@
   position: relative;
 }
 
-.grid {
+/* .grid {
   display: grid;
-  grid-template-columns: repeat(10, 30px);
-  grid-template-rows: repeat(10, 30px);
+  grid-template-columns: repeat(100, 30px);
+  grid-template-rows: repeat(100, 30px);
   position: relative;
-}
+} */
 
-.grid-cell {
+/* .grid-cell {
   width: 30px;
   height: 30px;
   box-sizing: border-box;
-}
+} */
 
 .white-cell {
   background-color: white;
@@ -28,21 +28,6 @@
 
 .black-cell {
   background-color: black;
-}
-
-.car-cell {
-  position: relative;
-}
-
-.car-cell::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 20px;
-  height: 20px;
-  background-color: red;
-  border-radius: 50%;
 }
 
 .controls {
