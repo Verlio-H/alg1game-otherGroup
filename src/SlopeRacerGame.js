@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import './SlopeRacerGame.css';
+import Vec2 from './Vec2';
 
-const GRID_SIZE = 100; // Define the size of the grid
-const CELL_SIZE = 10; // Size of each grid cell in pixels
+const GRID_SIZE = 60; // Define the size of the grid
+const CELL_SIZE = 15; // Size of each grid cell in pixels
 
-var moveX = 0;
-var moveY = 0;
+let moveX = 0;
+let moveY = 0;
+
+let course = [[[1,2], [10,40]],[[10,40], [GRID_SIZE-2,15]]];
+let radius = 2;
 
 function getRandomInt(min, max) {
   const minCeiled = Math.ceil(min);
@@ -13,7 +17,30 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); //inclusive
 }
 
+const min = Math.min;
+const max = Math.max;
+
 function SlopeRacerGame() {
+
+  // Distance to line
+  const distToLine = (points,position) => {
+    const p0 = new Vec2(points[0][0],points[0][1]);
+    const p1 = new Vec2(points[1][0],points[1][1]);
+    
+    const pos = new Vec2(position[0],position[1])
+    const lineVec = p1.subtract(p0);
+    const pointVec = pos.subtract(p0);
+
+    //console.log(lineVec.x,lineVec.y);
+    let comp = pointVec.dot(lineVec)/lineVec.dot(lineVec);
+
+    comp = min(1,max(comp,0))
+    let proj = p0.add(lineVec.scalMult(comp));
+    let dist = pos.subtract(proj).length();
+    //console.log(dist);
+    return dist;
+  }
+
   // Initialize the grid with white squares and edges as black squares
   const createInitialGrid = () => {
     const grid = [];
@@ -27,10 +54,16 @@ function SlopeRacerGame() {
           col === GRID_SIZE - 1
         ) {
           currentRow.push('black');
-        } else if (col === 1) {
-          currentRow.push('green');
         } else {
-          currentRow.push('white');
+          // Determine is square is within course
+          let dist = min(...course.map(function(x) { return distToLine(x,[col,row]) }))
+          if (dist >= radius) {
+            currentRow.push('black');
+          } else if (col === 1 && Math.abs(row-course[0][0][1])<=radius) {
+            currentRow.push('green');
+          } else {
+            currentRow.push('white');
+          }
         }
       }
       grid.push(currentRow);
@@ -40,12 +73,16 @@ function SlopeRacerGame() {
 
   const [grid, setGrid] = useState(createInitialGrid());
 
+  const randomCarInitPosition = () => {
+    return getRandomInt(max(course[0][0][1]-radius,1),min(course[0][0][1]+radius,GRID_SIZE-2));
+  }
+  
   // Set the starting position of the car
-  const [carPosition, setCarPosition] = useState({ x: 1, y: getRandomInt(1,GRID_SIZE - 2) });
+  const [carPosition, setCarPosition] = useState({ x: 1, y: randomCarInitPosition()});
 
   // Randomize car position
   const randomizePosition = () => {
-    setCarPosition({ x: 1, y: getRandomInt(1,GRID_SIZE - 2) })
+    setCarPosition({ x: 1, y: randomCarInitPosition()});
   }
 
   // Sliders' state
